@@ -1,4 +1,3 @@
-import { arraysAreEqual } from "./compareArrays";
 import { mergeTwoSortedArrays } from "./sortIngredients";
 
 export const mergeSortVariant = (
@@ -9,17 +8,17 @@ export const mergeSortVariant = (
   const subArrays: number[][] = [[]];
 
   // Split them all out into sub-arrays
-  let whichSubArray = 0;
+  let subArrayIndex = 0;
   for (let i = 0; i < inputArray.length; i++) {
-    console.log(subArrays, whichSubArray);
+    console.log(subArrays, subArrayIndex);
     if (i === 0) {
-      subArrays[whichSubArray][0] = inputArray[i];
+      subArrays[subArrayIndex][0] = inputArray[i];
     } else if (inputArray[i] < inputArray[i - 1]) {
-      whichSubArray += 1;
-      subArrays[whichSubArray] = [];
-      subArrays[whichSubArray][0] = inputArray[i];
+      subArrayIndex += 1;
+      subArrays[subArrayIndex] = [];
+      subArrays[subArrayIndex][0] = inputArray[i];
     } else {
-      subArrays[whichSubArray].push(inputArray[i]);
+      subArrays[subArrayIndex].push(inputArray[i]);
     }
   }
 
