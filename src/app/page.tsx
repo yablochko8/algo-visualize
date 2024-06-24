@@ -97,7 +97,10 @@ export default function Home() {
             <>
               <div className="flex flex-col m-3">
                 <div className={`flex flex-row justify-center text-${algoColor}-700`}>
-                  Algo number {index + 1}
+                  Algo {index + 1}: {algos[index].name}
+                </div>
+                <div className={`flex flex-row justify-center text-gray-400 text-sm`}>
+                  steps taken: {algoStats[index].stepsTaken}
                 </div>
 
 
