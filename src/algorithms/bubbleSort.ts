@@ -1,10 +1,10 @@
+import { arraysAreEqual } from "./compareArrays";
+
 const shouldSwapFn = (elem1: number, elem2: number): boolean => {
   return elem2 < elem1;
 };
 
-export const bubbleSortStep = (
-  arr: number[]
-): { array: number[]; hasChanged: boolean } => {
+const bubbleSortStep = (arr: number[]): number[] => {
   const newArray = [...arr];
   let hasChanged = false;
 
@@ -21,7 +21,24 @@ export const bubbleSortStep = (
       hasChanged = true;
     }
   }
-  return { array: newArray, hasChanged };
+  return newArray;
+};
+
+export const bubbleSort = (
+  inputArray: number[],
+  callback?: (interstepArray: number[], callbackRef: number) => void,
+  callbackRef?: number
+): number[] => {
+  const interstepArray = bubbleSortStep(inputArray);
+
+  if (!arraysAreEqual(interstepArray, inputArray)) {
+    if ((callback && callbackRef) || (callback && callbackRef === 0)) {
+      callback(interstepArray, callbackRef);
+    }
+    const newArray = bubbleSort(interstepArray, callback, callbackRef);
+    return newArray;
+  }
+  return interstepArray;
 };
 
 // export const bubbleSortWrapped = (

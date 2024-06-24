@@ -1,11 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { bubbleSortStep } from "@/algorithms/bubbleSort";
-import { bubbleSortTerribleStep } from "@/algorithms/bubbleSortTerrible";
+import { bubbleSort, bubbleSortStep } from "@/algorithms/bubbleSort";
 import { selectionSort } from "@/algorithms/selectionSort";
-
-
+import { arraysAreEqual } from "@/algorithms/compareArrays";
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -27,7 +25,6 @@ import { selectionSort } from "@/algorithms/selectionSort";
 // doesn't generate the necessary CSS.
 
 const algoColors = ["green", "red", "yellow", "blue"]
-
 
 const INITIAL_ARRAY = [99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13]
 
@@ -53,14 +50,10 @@ const initiateAlgoStats = (howManyAlgos: number): algoStats[] => {
   return result;
 }
 
-const altSortAlgo2 = bubbleSortStep
-
 type algoStats = {
   stepsTaken: number;
   timeTaken: number;
 }
-
-
 
 const normalizedElement = (element: number, array: number[]) => {
   const realNum = element / Math.max(...array)
@@ -71,43 +64,31 @@ const normalizedElement = (element: number, array: number[]) => {
 }
 
 export default function Home() {
-  const algos = [bubbleSortStep, bubbleSortTerribleStep, selectionSort, altSortAlgo2]
+  const algos = [bubbleSort, selectionSort]
 
   const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
   const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
 
   const [globalStep, setGlobalStep] = useState<number>(0)
 
+  const captureInterstepSnapsot = (interstepArray: number[], algoIndex: number) => {
+    // Create container for new results, and add latest result in
+    const newResults = [...algoResults]
+    newResults[algoIndex].unshift(interstepArray)
 
-
-  const oneAlgoCycle = (i: number) => {
-    const algoFunction = algos[i]
-    const oneStepResult = algoFunction(algoResults[i][0])
-    if (oneStepResult.hasChanged) {
-
-      // Create container for new results, and add latest result in
-      const newResults = [...algoResults]
-      newResults[i].unshift(oneStepResult.array)
-
-      // Update global result set each time a single algo has new results
-      const newAlgoStats = algoStats
-      newAlgoStats[i].stepsTaken += 1
-      setAlgoStats(newAlgoStats)
-      setAlgoResults(newResults)
-    }
+    // Update global result set each time a single algo has new results
+    const newAlgoStats = algoStats
+    newAlgoStats[algoIndex].stepsTaken += 1
+    setAlgoStats(newAlgoStats)
+    setAlgoResults(newResults)
   }
-
 
   useEffect(() => {
     for (let i = 0; i < algos.length; i++) {
-      // we should not run all of these at the same time
-      if (globalStep % algos.length === i) {
-        oneAlgoCycle(i)
-      }
+      const algoFunction = algos[i]
+      algoFunction(algoResults[i][0], captureInterstepSnapsot, i)
     }
-    setTimeout(() => setGlobalStep(globalStep + 1), 500)
-
-  }, [globalStep])
+  }, [])
 
   return (
     <div>
