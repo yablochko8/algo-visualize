@@ -3,7 +3,19 @@
 import { useEffect, useState } from "react";
 import { bubbleSortStep } from "@/algorithms/bubbleSortWithCallback";
 
-const INITIAL_ARRAY = [999, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 618, 7, 5, 13, 9]
+
+
+// all classes of BG color I expect to call from Tailwind:
+// bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
+// bg-green-600 bg-green-700 bg-green-800 bg-green-900
+// 
+// Context: In Tailwind CSS, the JIT (Just-In-Time) mode needs to know all the classes
+// that will be used in the project at build time. When you dynamically generate class
+// names in JavaScript, Tailwind might not be able to see those classes and therefore
+// doesn't generate the necessary CSS.
+
+
+const INITIAL_ARRAY = [99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13, 9]
 
 const altSortAlgo1 = bubbleSortStep
 
@@ -21,6 +33,14 @@ const createBlankAlgoStats = (): algoStats => {
   };
 }
 
+
+const normalizedElement = (element: number, array: number[]) => {
+  const realNum = element / Math.max(...array)
+  const minOutput = 1
+  const maxOutput = 9
+
+  return Math.floor(realNum * (maxOutput - minOutput)) + minOutput
+}
 
 export default function Home() {
   const [arrays, setArrays] = useState<number[][][]>([[INITIAL_ARRAY], [INITIAL_ARRAY], [INITIAL_ARRAY]])
@@ -59,13 +79,17 @@ export default function Home() {
         return (
           <>
             <br />
-            {singleArray.map((element) => {
-              return (
-                <span>
-                  {element} {" -> "}
-                </span>
-              )
-            })}
+            <div className="flex flex-row">
+
+              {singleArray.map((element) => {
+                const normElement = normalizedElement(element, singleArray)
+                return (
+                  <span className={`flex flex-col justify-center m-1 p-1 bg-green-${normElement}00 rounded`}>
+                    {element}
+                  </span>
+                )
+              })}
+            </div>
             <br />
           </>
         )
