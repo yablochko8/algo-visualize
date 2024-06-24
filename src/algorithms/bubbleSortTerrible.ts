@@ -36,7 +36,7 @@ export const bubbleSortTerribleStep = (
     }
   }
 
-  for (let i = 0; i < arr.length - 3; i = i + 3) {
+  for (let i = 0; i <= arr.length - 3; i = i + 3) {
     const element1 = newArray[i];
     const element2 = newArray[i + 1];
 
