@@ -24,3 +24,10 @@ export const mergeTwoSortedArrays = (
   }
   return newArray;
 };
+
+export const linearSearch = (inputArray: number[], targeNum: number) => {
+  for (let i = 0; i < inputArray.length; i++) {
+    if (inputArray[i] === targeNum) return i;
+  }
+  return -1;
+};
