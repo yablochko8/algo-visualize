@@ -1,4 +1,4 @@
-const bubbleSort = (arr: number[]) => {
+export const bubbleSort = (arr: number[]): number[] => {
   const newArray = [...arr];
   let swapped = false;
 
@@ -16,7 +16,10 @@ const bubbleSort = (arr: number[]) => {
     }
   }
 
-  if (!swapped) {
-    console.log("sorted");
+  if (swapped) {
+    const newNewArray = bubbleSort(newArray);
+    return newNewArray;
   }
+
+  return newArray;
 };

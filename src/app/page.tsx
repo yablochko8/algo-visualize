@@ -6,11 +6,25 @@
 // 
 // 
 
-
+import { bubbleSort } from "../algorithms/bubbleSort"
 
 export default function Home() {
+  const startingArray = [2, 4, 6, 3, 88, 1, 94, 26]
+
+  const sortedArray = bubbleSort(startingArray)
   return (
     <div>
+      <h1> Hello world</h1>
+      <h2>Unsorted Array</h2>
+      {startingArray.map((num) => {
+        return <span key={num}> {num} <br /> </span>
+      })}
+      <br />
+
+      <h2>Sorted Array</h2>
+      {sortedArray.map((num) => {
+        return <span key={num}>{num} <br /></span>
+      })}
 
     </div>
   );
