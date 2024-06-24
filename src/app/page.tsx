@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { bubbleSortStep } from "@/algorithms/bubbleSortWithCallback";
-import { bubbleSortTerribleStep } from "@/algorithms/bubbleSortTerrible";
-
-
+import React, { useEffect, useState } from "react";
+import { bubbleSort } from "@/algorithms/bubbleSort";
+import { selectionSort } from "@/algorithms/selectionSort";
+import { arraysAreEqual } from "@/algorithms/compareArrays";
+import { mergeSortVariant } from "@/algorithms/mergeSortVariant";
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -27,14 +27,14 @@ import { bubbleSortTerribleStep } from "@/algorithms/bubbleSortTerrible";
 
 const algoColors = ["green", "red", "yellow", "blue"]
 
+const INITIAL_ARRAY = [11, 99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13]
 
-const INITIAL_ARRAY = [99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13, 9]
-
-const altSortAlgo2 = bubbleSortStep
-
-type algoStats = {
-  stepsTaken: number;
-  timeTaken: number;
+const initiateAlgoResults = (howManyAlgos: number): number[][][] => {
+  const result: number[][][] = [];
+  for (let i = 0; i < howManyAlgos; i++) {
+    result.push([[...INITIAL_ARRAY]]);
+  }
+  return result;
 }
 
 const createBlankAlgoStats = (): algoStats => {
@@ -43,7 +43,18 @@ const createBlankAlgoStats = (): algoStats => {
     timeTaken: 0
   };
 }
+const initiateAlgoStats = (howManyAlgos: number): algoStats[] => {
+  const result: algoStats[] = [];
+  for (let i = 0; i < howManyAlgos; i++) {
+    result[i] = createBlankAlgoStats()
+  }
+  return result;
+}
 
+type algoStats = {
+  stepsTaken: number;
+  timeTaken: number;
+}
 
 const normalizedElement = (element: number, array: number[]) => {
   const realNum = element / Math.max(...array)
@@ -54,68 +65,82 @@ const normalizedElement = (element: number, array: number[]) => {
 }
 
 export default function Home() {
-  const [algoResults, setAlgoResults] = useState<number[][][]>([[INITIAL_ARRAY], [INITIAL_ARRAY], [INITIAL_ARRAY]])
+  const algos = [bubbleSort, selectionSort, mergeSortVariant, mergeSortVariant]
 
-  const [algoStats, setAlgoStats] = useState<algoStats[]>([createBlankAlgoStats(), createBlankAlgoStats(), createBlankAlgoStats()])
+  const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
+  const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
 
-  const algos = [bubbleSortStep, bubbleSortTerribleStep, altSortAlgo2]
+  const [globalStep, setGlobalStep] = useState<number>(0)
 
-  // const sortedArray = bubbleSort(startingArray)
+  const captureInterstepSnapsot = (interstepArray: number[], algoIndex: number) => {
+    // Create container for new results, and add latest result in
+    const newResults = [...algoResults]
+    newResults[algoIndex].unshift(interstepArray)
+
+    // Update global result set each time a single algo has new results
+    const newAlgoStats = algoStats
+    newAlgoStats[algoIndex].stepsTaken += 1
+    setAlgoStats(newAlgoStats)
+    setAlgoResults(newResults)
+  }
 
   useEffect(() => {
-
     for (let i = 0; i < algos.length; i++) {
-
-      // Run the algorithm. Most recent results are at the beginning of that algo's array
       const algoFunction = algos[i]
-      const oneStepResult = algoFunction(algoResults[i][0])
-
-      // Create container for new results, and add latest result in
-      const newResults = [...algoResults]
-      newResults[i].unshift(oneStepResult.array)
-
-      // Update global result set each time a single algo has new results
-      if (oneStepResult.hasChanged) {
-        const newAlgoStats = algoStats
-        newAlgoStats[i].stepsTaken += 1
-        setAlgoStats(newAlgoStats)
-        setTimeout(() => { setAlgoResults(newResults) }, 2000)
-      }
-
+      algoFunction(algoResults[i][0], captureInterstepSnapsot, i)
     }
-
-  }, [algoResults])
+  }, [])
 
   return (
     <div>
       <h2>Let's compare algorithms!</h2>
       <br />
       <div className="flex flex-row">
-        {algoResults.map((algoResultSet, index) => {
-          const algoColor = algoColors[index]
+        {algoResults.map((algoResultSet, algoNum) => {
+          const algoColor = algoColors[algoNum]
           return (
             <>
               <div className="flex flex-col m-3">
                 <div className={`flex flex-row justify-center text-${algoColor}-700`}>
-                  Algo {index + 1}: {algos[index].name}
+                  Algo {algoNum + 1}: {algos[algoNum].name}
                 </div>
                 <div className={`flex flex-row justify-center text-gray-400 text-sm`}>
-                  steps taken: {algoStats[index].stepsTaken}
+                  steps taken: {algoStats[algoNum].stepsTaken}
                 </div>
 
 
-                {algoResultSet.map((singleArray) => {
+                {algoResultSet.map((singleArray, testCycleNum) => {
+                  // testCycleNum is 0 for most recent, 1 for second most recent etc
+                  // a testCycle of number 3 (ie 4th result) in a set of length 4 will
+                  // NOT have an antecedent. Hence testCycle needs to be at smaller
+                  // than length - 1 
+                  const testHasAntecedent = (testCycleNum < algoResults[algoNum].length - 1)
+
                   return (
                     <>
                       <br />
                       <div className="flex flex-row">
 
-                        {singleArray.map((element) => {
+                        {singleArray.map((element, elementIndex) => {
                           const normElement = normalizedElement(element, singleArray)
+
+                          const elementHasChanged = (testHasAntecedent && algoResultSet[testCycleNum][elementIndex] != algoResultSet[testCycleNum + 1][elementIndex])
+
                           return (
-                            <span className={`flex flex-col justify-center m-1 p-1 bg-${algoColor}-${normElement}00 rounded`}>
-                              {element}
-                            </span>
+                            <>
+                              <div className="flex flex-col">
+
+                                <div className={`flex flex-row justify-center m-1 p-1 bg-${algoColor}-${normElement}00 rounded`}>
+                                  {element}
+                                </div>
+                                <div className={`flex flex-row h-1 ${elementHasChanged ? "bg-gray-400" : ""}`}>
+                                </div>
+                                <div className="flex flex-row h-5">
+
+                                </div>
+                              </div>
+
+                            </>
                           )
                         })}
                       </div>
@@ -126,36 +151,9 @@ export default function Home() {
                 )
                 }
 
-
-
-
-
-
-
               </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </>
-
-
-
 
           )
         })}
