@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { bubbleSortStep } from "@/algorithms/bubbleSortWithCallback";
+import { bubbleSortStep } from "@/algorithms/bubbleSort";
 import { bubbleSortTerribleStep } from "@/algorithms/bubbleSortTerrible";
+import { selectionSort } from "@/algorithms/selectionSort";
 
 
 
@@ -70,7 +71,7 @@ const normalizedElement = (element: number, array: number[]) => {
 }
 
 export default function Home() {
-  const algos = [bubbleSortStep, bubbleSortTerribleStep, altSortAlgo2, altSortAlgo2]
+  const algos = [bubbleSortStep, bubbleSortTerribleStep, selectionSort, altSortAlgo2]
 
   const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
   const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
