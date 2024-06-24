@@ -14,7 +14,7 @@ export const bubbleSortStep = (
 
     const shouldSwap = shouldSwapFn(element1, element2);
     if (shouldSwap) {
-      // we need to indicate thaere was a swap
+      // we need to indicate there was a swap
       newArray[i] = element2;
       newArray[i + 1] = element1;
 
