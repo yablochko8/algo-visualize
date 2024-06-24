@@ -1,30 +1,50 @@
-// iterate through an array
-// compare each element to the next element
-// if the next elemetn is smaller, then we're going to swap the elements
-// when we're done with the array, we check if the array is sorted
-// if it's not sorted, we do it again
-// 
-// 
+"use client"
 
-import { bubbleSort } from "../algorithms/bubbleSort"
+import { useEffect, useState } from "react";
+import { bubbleSort } from "../algorithms/bubbleSortSimple"
+import { bubbleSortStep } from "@/algorithms/bubbleSortWithCallback";
+
+const INITIAL_ARRAY = [999, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 618, 7, 5, 13, 9]
 
 export default function Home() {
-  const startingArray = [2, 4, 6, 3, 88, 1, 94, 26]
+  const [arrays, setArrays] = useState<number[][]>([INITIAL_ARRAY])
 
-  const sortedArray = bubbleSort(startingArray)
+  // const sortedArray = bubbleSort(startingArray)
+
+  useEffect(() => {
+
+    const result = bubbleSortStep(arrays[arrays.length - 1])
+
+    console.log("result is", result)
+
+    if (result.swapped) {
+      setTimeout(() => { setArrays([...arrays, result.arr]) }, 2000)
+    }
+
+  }, [arrays])
+
   return (
     <div>
-      <h1> Hello world</h1>
-      <h2>Unsorted Array</h2>
-      {startingArray.map((num) => {
-        return <span key={num}> {num} <br /> </span>
-      })}
+      <h2>Arrays</h2>
       <br />
-
-      <h2>Sorted Array</h2>
-      {sortedArray.map((num) => {
-        return <span key={num}>{num} <br /></span>
-      })}
+      <div>Each array should have the same elements, but closer to the correct order:</div>
+      {arrays.map((singleArray) => {
+        return (
+          <>
+            <br />
+            {singleArray.map((element) => {
+              return (
+                <span>
+                  {element} {" -> "}
+                </span>
+              )
+            })}
+            <br />
+          </>
+        )
+      }
+      )
+      }
 
     </div>
   );
