@@ -5,9 +5,7 @@ const selectionSortStep = (inputArray: number[], step: number): number[] => {
   let smallestValue = inputArray[step];
   const outputArray = [...inputArray];
 
-  console.log("smallest value is", step);
-
-  // find the next smallest
+  // find the next smallest value
   for (let i = step; i < inputArray.length; i++) {
     if (inputArray[i] < smallestValue) {
       smallestIndex = i;
@@ -18,7 +16,6 @@ const selectionSortStep = (inputArray: number[], step: number): number[] => {
   // move it to the front
   outputArray.splice(smallestIndex, 1);
   outputArray.unshift(smallestValue);
-  console.log("step", step, "input", inputArray, "output", outputArray);
   return outputArray;
 };
 
@@ -27,13 +24,14 @@ export const selectionSort = (
   callback?: (interstepArray: number[], callbackRef: number) => void,
   callbackRef?: number
 ): number[] => {
+  // create a container for the answer
   let newArray = [...inputArray];
 
+  // populate each cell one by one
   for (let i = 0; i < inputArray.length; i++) {
     newArray = selectionSortStep(newArray, i);
     if ((callback && callbackRef) || (callback && callbackRef === 0)) {
       callback(newArray, callbackRef);
-      console.log(newArray);
     }
   }
   return newArray;
