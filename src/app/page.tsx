@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { bubbleSort } from "@/algorithms/bubbleSort";
 import { selectionSort } from "@/algorithms/selectionSort";
 import { arraysAreEqual } from "@/algorithms/compareArrays";
+import { mergeSortVariant } from "@/algorithms/mergeSortVariant";
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -26,7 +27,7 @@ import { arraysAreEqual } from "@/algorithms/compareArrays";
 
 const algoColors = ["green", "red", "yellow", "blue"]
 
-const INITIAL_ARRAY = [99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13]
+const INITIAL_ARRAY = [11, 99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13]
 
 const initiateAlgoResults = (howManyAlgos: number): number[][][] => {
   const result: number[][][] = [];
@@ -64,7 +65,7 @@ const normalizedElement = (element: number, array: number[]) => {
 }
 
 export default function Home() {
-  const algos = [bubbleSort, selectionSort]
+  const algos = [bubbleSort, selectionSort, mergeSortVariant, mergeSortVariant]
 
   const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
   const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
