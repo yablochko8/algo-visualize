@@ -40,10 +40,3 @@ export const bubbleSort = (
   }
   return interstepArray;
 };
-
-// export const bubbleSortWrapped = (
-//   arr: number[],
-//   callback: (returnArray: number[]) => void
-// ): number[] => {
-//   return arr;
-// };

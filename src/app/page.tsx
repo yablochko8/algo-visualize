@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { bubbleSort, bubbleSortStep } from "@/algorithms/bubbleSort";
+import { bubbleSort } from "@/algorithms/bubbleSort";
 import { selectionSort } from "@/algorithms/selectionSort";
 import { arraysAreEqual } from "@/algorithms/compareArrays";
 

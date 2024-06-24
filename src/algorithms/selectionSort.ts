@@ -5,56 +5,36 @@ const selectionSortStep = (inputArray: number[], step: number): number[] => {
   let smallestValue = inputArray[step];
   const outputArray = [...inputArray];
 
+  console.log("smallest value is", step);
+
   // find the next smallest
   for (let i = step; i < inputArray.length; i++) {
     if (inputArray[i] < smallestValue) {
       smallestIndex = i;
       smallestValue = inputArray[i];
     }
-
-    // move it to the front
-    outputArray.splice(smallestIndex, 1);
-    outputArray.unshift(smallestValue);
   }
+
+  // move it to the front
+  outputArray.splice(smallestIndex, 1);
+  outputArray.unshift(smallestValue);
+  console.log("step", step, "input", inputArray, "output", outputArray);
   return outputArray;
 };
 
 export const selectionSort = (
-  inputArray: number[]
-): { array: number[]; hasChanged: boolean } => {
+  inputArray: number[],
+  callback?: (interstepArray: number[], callbackRef: number) => void,
+  callbackRef?: number
+): number[] => {
   let newArray = [...inputArray];
 
   for (let i = 0; i < inputArray.length; i++) {
     newArray = selectionSortStep(newArray, i);
+    if ((callback && callbackRef) || (callback && callbackRef === 0)) {
+      callback(newArray, callbackRef);
+      console.log(newArray);
+    }
   }
-  const hasChanged = inputArray === newArray;
-  return { array: newArray, hasChanged };
+  return newArray;
 };
-
-// = (
-
-// )
-
-//   let swapped = false;
-
-//   for (let i = 0; i < arr.length - 1; i++) {
-//     const element1 = arr[i];
-//     const element2 = arr[i + 1];
-
-//     const shouldSwap = element2 <= element1;
-//     if (shouldSwap) {
-//       // we need to indicate thaere was a swap
-//       newArray[i] = element2;
-//       newArray[i + 1] = element1;
-
-//       swapped = true;
-//     }
-//   }
-
-//   if (swapped) {
-//     const newNewArray = bubbleSort(newArray);
-//     return newNewArray;
-//   }
-
-//   return newArray;
-// };
