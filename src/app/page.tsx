@@ -108,31 +108,6 @@ export default function Home() {
 
   }, [globalStep])
 
-  // useEffect(() => {
-
-  //   for (let i = 0; i < algos.length; i++) {
-
-  //     // Run the algorithm. Most recent results are at the beginning of that algo's array
-  //     const algoFunction = algos[i]
-  //     const oneStepResult = algoFunction(algoResults[i][0])
-
-  //     if (oneStepResult.hasChanged) {
-
-  //       // Create container for new results, and add latest result in
-  //       const newResults = [...algoResults]
-  //       newResults[i].unshift(oneStepResult.array)
-
-  //       // Update global result set each time a single algo has new results
-  //       const newAlgoStats = algoStats
-  //       newAlgoStats[i].stepsTaken += 1
-  //       setAlgoStats(newAlgoStats)
-  //       setTimeout(() => { setAlgoResults(newResults) }, 2000)
-  //     }
-
-  //   }
-
-  // }, [algoResults])
-
   return (
     <div>
       <h2>Let's compare algorithms!</h2>
@@ -166,12 +141,23 @@ export default function Home() {
                         {singleArray.map((element, elementIndex) => {
                           const normElement = normalizedElement(element, singleArray)
 
-                          // const elementHasChanged = (testHasAntecedent && elementIndex[testCycleNum][elementIndex] != )
+                          const elementHasChanged = (testHasAntecedent && algoResultSet[testCycleNum][elementIndex] != algoResultSet[testCycleNum + 1][elementIndex])
 
                           return (
-                            <span className={`flex flex-col justify-center m-1 p-1 bg-${algoColor}-${normElement}00 rounded`}>
-                              {element}
-                            </span>
+                            <>
+                              <div className="flex flex-col">
+
+                                <div className={`flex flex-row justify-center m-1 p-1 bg-${algoColor}-${normElement}00 rounded`}>
+                                  {element}
+                                </div>
+                                <div className={`flex flex-row h-1 ${elementHasChanged ? "bg-gray-400" : ""}`}>
+                                </div>
+                                <div className="flex flex-row h-5">
+
+                                </div>
+                              </div>
+
+                            </>
                           )
                         })}
                       </div>
