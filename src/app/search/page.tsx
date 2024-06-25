@@ -1,11 +1,12 @@
 "use client"
 
-
 export default function Home() {
 
   return (
     <div>
-      Algorithms are Greeeeeeat.
+
+      <h2>This is the Search page</h2>
+
 
 
     </div>
