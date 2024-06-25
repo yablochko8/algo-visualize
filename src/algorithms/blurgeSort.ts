@@ -1,4 +1,4 @@
-import { arraysAreEqual } from "./compareArrays";
+import { arraysAreEqual } from "./checkArrays";
 
 const blurgeSortStep = (inputArray: number[]): number[] => {
   const subArrays: number[][] = [[]];
