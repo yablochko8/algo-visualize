@@ -1,5 +1,7 @@
 // Selection Sort algorithm finds the lowest value in an array and moves it to the front of the array.
 
+import { arrayAlreadySorted } from "./checkArrays";
+
 const selectionSortStep = (inputArray: number[], step: number): number[] => {
   let smallestIndex = step;
   let smallestValue = inputArray[step];
@@ -24,6 +26,8 @@ export const selectionSort = (
   callback?: (interstepArray: number[], callbackRef: number) => void,
   callbackRef?: number
 ): number[] => {
+  if (arrayAlreadySorted(inputArray)) return inputArray;
+
   // create a container for the answer
   let newArray = [...inputArray];
 

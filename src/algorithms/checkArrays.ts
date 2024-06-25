@@ -3,7 +3,12 @@ export const arraysAreEqual = (arr1: number[], arr2: number[]): boolean => {
 };
 
 export const arrayAlreadySorted = (array: number[]) => {
-  return false;
+  for (let i = 0; i < array.length - 1; i++) {
+    if (array[i] > array[i + 1]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 // ADD THIS IN

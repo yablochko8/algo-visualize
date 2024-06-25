@@ -1,4 +1,4 @@
-import { arraysAreEqual } from "./compareArrays";
+import { arraysAreEqual } from "./checkArrays";
 
 const shouldSwapFn = (elem1: number, elem2: number): boolean => {
   return elem2 < elem1;
