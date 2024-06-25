@@ -1,20 +1,26 @@
-const depthFirstSearch = (searchSpace: any, target: string): string[] => {
-  // This returns a set of keys/index values for nested objects/arrays
-
+const getIkeys = (arrayOrObject: any): any[] => {
   // The immediate candidates we can check within the searchSpace may be answers
   // or may be KEYS that let us access further candidates.
   // Let's handle these keys consistently in an array. If we're dealing with the
   // "keys" of an array, they will index values (numbers). That's fine.
 
-  let keys: any[] = [];
+  let ikeys: any[] = [];
 
-  if (Array.isArray(searchSpace)) {
-    for (let i = 0; i < searchSpace.length; i++) {
-      keys.push(i);
+  if (Array.isArray(arrayOrObject)) {
+    for (let i = 0; i < arrayOrObject.length; i++) {
+      ikeys.push(i);
     }
-  } else if (typeof searchSpace === "object") {
-    keys = keys.concat(Object.keys(searchSpace));
+  } else if (typeof arrayOrObject === "object") {
+    ikeys = ikeys.concat(Object.keys(arrayOrObject));
   }
+
+  return ikeys;
+};
+
+const depthFirstSearch = (searchSpace: any, target: string): any[] => {
+  // This returns a set of keys/index values for nested objects/arrays
+
+  let keys = getIkeys(searchSpace);
 
   if (keys.length > 0) {
     // We run through the keys and for each one, we first check
@@ -22,8 +28,11 @@ const depthFirstSearch = (searchSpace: any, target: string): string[] => {
     // the answer back!
     for (let i = 0; i < keys.length; i++) {
       const ikey = keys[i];
-      if (searchSpace[ikey] === target) {
+      if (ikey === target) {
         return [ikey];
+      }
+      if (searchSpace[ikey] === target) {
+        return [ikey, target];
       }
 
       // If it doesn't, we jump straight into this same query on
@@ -39,6 +48,57 @@ const depthFirstSearch = (searchSpace: any, target: string): string[] => {
       // If we're not egetting hits, we eventually end up back at
       // the original top level. We have plumbed the depts of a single
       // possibility here.
+    }
+  }
+
+  // If we end up down here, the target was NOT found
+  return [];
+};
+
+const useIkeys = (searchSpace: any, ikeys: any[]): any => {
+  let current = searchSpace;
+  for (const ikey of ikeys) {
+    current = current[ikey];
+  }
+  return current;
+};
+
+const breadthFirstSearch = (searchSpace: any, target: string): any[] => {
+  let ikeys = getIkeys(searchSpace);
+
+  const checkingQueue: any[][] = [];
+
+  // Let's start simple with a populated queue
+  for (let i = 0; i < ikeys.length; i++) {
+    const ikey = ikeys[i];
+    checkingQueue.push([ikey]);
+  }
+
+  // Now let's go through the ikeys in that queue
+  // and use each of them to check on a value in
+  // in the searchSpace object.
+  for (let i = 0; i < checkingQueue.length; i++) {
+    console.log("For Loop running for the " + i + "th time");
+
+    // "ikeys" here is the path we're checking
+    // it might look like ["name", "cat", 56, "Jimmy15"]
+    const ikeys = checkingQueue[i];
+    const lastIkey = ikeys[ikeys.length - 1];
+    if (lastIkey === target) {
+      return ikeys;
+    }
+
+    const valueToTest = useIkeys(searchSpace, ikeys);
+
+    if (valueToTest === target) {
+      ikeys.push(target);
+      return ikeys;
+    } else {
+      const moreIkeys = getIkeys(valueToTest);
+      for (const newIkey of moreIkeys) {
+        const newIkeys = ikeys.concat([newIkey]);
+        checkingQueue.push(newIkeys);
+      }
     }
   }
 
@@ -192,15 +252,15 @@ const animalKingdom = {
 
 console.log(
   "Macaca fascicularis can be found under:",
-  depthFirstSearch(animalKingdom, "Macaca fascicularis")
+  breadthFirstSearch(animalKingdom, "Macaca fascicularis")
 );
 
 console.log(
   "Araneus diadematus can be found under:",
-  depthFirstSearch(animalKingdom, "Araneus diadematus")
+  breadthFirstSearch(animalKingdom, "Araneae")
 );
 
 console.log(
   "We won't find an answer for this query. Returned path is:",
-  depthFirstSearch(animalKingdom, "Donald Duck")
+  breadthFirstSearch(animalKingdom, "Donald Duck")
 );
