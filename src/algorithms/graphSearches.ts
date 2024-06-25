@@ -22,8 +22,11 @@ const depthFirstSearch = (searchSpace: any, target: string): string[] => {
     // the answer back!
     for (let i = 0; i < keys.length; i++) {
       const ikey = keys[i];
-      if (searchSpace[ikey] === target) {
+      if (ikey === target) {
         return [ikey];
+      }
+      if (searchSpace[ikey] === target) {
+        return [ikey, target];
       }
 
       // If it doesn't, we jump straight into this same query on
@@ -197,7 +200,7 @@ console.log(
 
 console.log(
   "Araneus diadematus can be found under:",
-  depthFirstSearch(animalKingdom, "Araneus diadematus")
+  depthFirstSearch(animalKingdom, "Araneae")
 );
 
 console.log(
