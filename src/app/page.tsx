@@ -66,7 +66,7 @@ const normalizedElement = (element: number, array: number[]) => {
 }
 
 export default function Home() {
-  const algos = [bubbleSort, selectionSort, mergeSortVariant, insertionSort]
+  const algos = [insertionSort, bubbleSort, selectionSort, mergeSortVariant]
 
   const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
   const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
