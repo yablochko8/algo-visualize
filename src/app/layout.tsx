@@ -56,7 +56,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <HeaderMenu />
-        {children}</body>
+        <div className="flex flex-row m-4">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
