@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,11 +15,14 @@ const linkList: LinkProps[] = [
 ]
 
 
+// const currentRoute = usePathname();
+
+const currentRoute = "lol";
 
 const HeaderLink = ({ title, path }: LinkProps) => {
   return (
     <a href={path}>
-      <div className="flex flex-col rounded m-2 p-2">
+      <div className={`flex flex-col rounded m-2 py-2 px-4 ${(path === currentRoute) ? "bg-zinc-400" : "bg-zinc-200 hover:bg-yellow-200"}`}>
         {title}
       </div>
     </a>
@@ -26,7 +30,7 @@ const HeaderLink = ({ title, path }: LinkProps) => {
 }
 const HeaderMenu = () => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row p-1 bg-zinc-100 mb-5">
       {linkList.map(
         (linkProps) => {
           return (
