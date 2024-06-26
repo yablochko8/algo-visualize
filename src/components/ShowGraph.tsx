@@ -1,33 +1,51 @@
 import { Node } from "@/algorithms/mergeSortTreeVis"
+import { ShowArray } from "./ShowArray"
 
 
 
-const childClassName = "flex flex-col bg-blue-400 rounded m-2 justify-center"
 
 export const ShowGraph = ({ node }: { node: Node }) => {
-    return (
-        <div>
-            <div className="flex flex-col bg-blue-200 rounded m-2 justify-center">
-                <div className="flex flex-row justify-center"> {node.unsortedArray} </div>
-                <br />
-                <div className="flex flex-row justify-center">
-                    <div className={childClassName}>
-                        {node.leftChild ? <ShowGraph node={node.leftChild} /> : <div />}
+
+    const rowClass = "flex flex-row justify-center py-1"
+    const classWithinRowForArray = "flex justify-center p-1 rounded border" // This does not need to contain flex-row
+    const columnClass = "flex flex-col bg-slate-100 px-0.5"
+
+    if (!node.leftChild || !node.rightChild)
+        return (
+            <div className={columnClass}>
+                <div className={rowClass}>
+                    <div className={classWithinRowForArray}>
+                        <ShowArray array={node.sortedArray} />
                     </div>
-                    <div className={childClassName}>
-                        {node.rightChild ? <ShowGraph node={node.rightChild} /> : <div />}
-                    </div>
-                </div>
-                <div className="flex flex-row justify-center">
-                    {node.sortedArray}
 
                 </div>
             </div>
 
+        )
 
 
+    else
+        return (
+            <div className={columnClass}>
+                <div className={rowClass}>
+                    <div className={classWithinRowForArray}>
+                        <ShowArray array={node.unsortedArray} color="red" />
+                    </div>
+                </div>
+                <div className={rowClass}>
+                    <div className={columnClass}>
+                        {node.leftChild ? <ShowGraph node={node.leftChild} /> : <div />}
+                    </div>
+                    <div className={columnClass}>
+                        {node.rightChild ? <ShowGraph node={node.rightChild} /> : <div />}
+                    </div>
+                </div>
+                <div className={rowClass}>
+                    <div className={classWithinRowForArray}>
 
-
-        </div>
-    )
+                        <ShowArray array={node.sortedArray} color="green" />
+                    </div>
+                </div>
+            </div>
+        )
 }
