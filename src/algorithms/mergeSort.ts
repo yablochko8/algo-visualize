@@ -30,7 +30,11 @@ const merge = (left: number[], right: number[]): number[] => {
   return [...sorted, ...newLeft, ...newRight];
 };
 
-const mergeSort = (array: number[]): number[] => {
+export const mergeSort = (
+  array: number[],
+  callback?: (interstepArray: number[], callbackRef: number) => void,
+  callbackRef?: number
+): number[] => {
   // an array of only one element is already "sorted"
   if (array.length === 1) {
     return array;
