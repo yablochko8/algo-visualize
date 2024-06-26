@@ -1,4 +1,4 @@
-import { arrayAlreadySorted } from "./checkArrays";
+import { arrayAlreadySorted } from "./arrayTools";
 
 const shouldMoveLeft = (array: number[], index: number): boolean => {
   if (index === 0) return false;

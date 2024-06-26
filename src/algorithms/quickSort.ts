@@ -4,7 +4,7 @@
 // Overall, it is slightly faster than merge sort and heapsort for randomized
 // data, particularly on larger distributions.[3]
 
-import { arrayAlreadySorted } from "./checkArrays";
+import { arrayAlreadySorted } from "./arrayTools";
 
 // Quicksort is a divide-and-conquer algorithm. It works by selecting a 'pivot'
 // element from the array and partitioning the other elements into two

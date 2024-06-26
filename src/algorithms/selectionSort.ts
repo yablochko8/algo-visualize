@@ -16,7 +16,7 @@
 // exchanging (swapping) it with the leftmost unsorted element (putting it
 // in sorted order), and moving the sublist boundaries one element to the right.
 
-import { arrayAlreadySorted } from "./checkArrays";
+import { arrayAlreadySorted } from "./arrayTools";
 
 const selectionSortStep = (inputArray: number[], step: number): number[] => {
   let smallestIndex = step;
