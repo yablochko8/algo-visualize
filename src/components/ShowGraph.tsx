@@ -1,4 +1,4 @@
-import { Node } from "@/algorithms/mergeSortTreeVis"
+import { Node } from "@/algorithms/mergeSort"
 import { ShowArray } from "./ShowArray"
 
 
