@@ -36,6 +36,7 @@ export const ShowGraph = ({ node }: { node: Node }) => {
                     <div className={columnClass}>
                         {node.leftChild ? <ShowGraph node={node.leftChild} /> : <div />}
                     </div>
+                    {node.middleChild ? <div className={columnClass}><ShowGraph node={node.middleChild} /></div> : null}
                     <div className={columnClass}>
                         {node.rightChild ? <ShowGraph node={node.rightChild} /> : <div />}
                     </div>

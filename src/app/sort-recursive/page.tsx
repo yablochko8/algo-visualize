@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { quickSort } from "@/algorithms/quickSort";
-import { mergeSort } from "@/algorithms/mergeSort";
 import { ShowGraph } from "../../components/ShowGraph"
 import { mergeSortNodeVis } from "@/algorithms/mergeSortTreeVis"
+import { quickSortNodeVis } from "@/algorithms/quickSortTreeVis";
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -101,6 +100,10 @@ export default function Home() {
   }, [])
 
   const testValues = mergeSortNodeVis(INITIAL_ARRAY)
+
+  const testValues2 = quickSortNodeVis(INITIAL_ARRAY)
+
+
   console.log(testValues.sortedArray)
 
   return (
@@ -109,6 +112,11 @@ export default function Home() {
 
       <ShowGraph node={testValues.graph} />
 
+      <br />
+      <br />
+
+
+      <ShowGraph node={testValues2.graph} />
 
 
 

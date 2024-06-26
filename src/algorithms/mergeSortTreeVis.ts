@@ -2,6 +2,7 @@ export type Node = {
   unsortedArray: number[];
   sortedArray: number[];
   leftChild?: Node;
+  middleChild?: Node;
   rightChild?: Node;
 };
 
@@ -27,13 +28,10 @@ const merge = (left: number[], right: number[]): number[] => {
 };
 
 export const mergeSortNodeVis = (
-  inputArray: number[],
-  node?: Node
+  inputArray: number[]
 ): { sortedArray: number[]; graph: Node } => {
-  // if passed an empty graph, we must start one
-  let thisNode: Node = node
-    ? node
-    : { unsortedArray: inputArray, sortedArray: inputArray };
+  // we create a Node object to capture all the activity of this iteration
+  let thisNode: Node = { unsortedArray: inputArray, sortedArray: inputArray };
 
   // an array of only one element is already "sorted"
   if (inputArray.length === 1) {
@@ -57,15 +55,6 @@ export const mergeSortNodeVis = (
   thisNode.rightChild = recursiveCallRight.graph;
   thisNode.sortedArray = outputArray;
 
-  // if (callback) {
-  //   const thisNode: Node = {
-  //     unsortedArray: inputArray,
-  //     sortedArray: outputArray,
-  //   };
-  //   const localArray = merge(sortedLeft, sortedRight);
-  //   callback(localArray);
-  // }
-  // sorted subarrays are merged back together
   return { sortedArray: outputArray, graph: thisNode };
 };
 
