@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { ShowGraph } from "../../components/ShowGraph"
-import { mergeSortNodeVis } from "@/algorithms/mergeSortTreeVis"
-import { quickSortNodeVis } from "@/algorithms/quickSortTreeVis";
+import { RecursiveSortResults, mergeSort } from "@/algorithms/mergeSort"
+import { quickSort } from "@/algorithms/quickSort";
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -24,99 +24,35 @@ import { quickSortNodeVis } from "@/algorithms/quickSortTreeVis";
 // names in JavaScript, Tailwind might not be able to see those classes and therefore
 // doesn't generate the necessary CSS.
 
-const algoColors = ["green", "red", "yellow", "blue"]
-
-const INITIAL_ARRAY = [11, 99, 2, 4, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, 5, 13]
-
-const initiateAlgoResults = (howManyAlgos: number): number[][][] => {
-  const result: number[][][] = [];
-  for (let i = 0; i < howManyAlgos; i++) {
-    result.push([[...INITIAL_ARRAY]]);
-  }
-  return result;
-}
-
-const createBlankAlgoStats = (): algoStats => {
-  return {
-    stepsTaken: 0,
-    timeTaken: 0
-  };
-}
-const initiateAlgoStats = (howManyAlgos: number): algoStats[] => {
-  const result: algoStats[] = [];
-  for (let i = 0; i < howManyAlgos; i++) {
-    result[i] = createBlankAlgoStats()
-  }
-  return result;
-}
-
-type algoStats = {
-  stepsTaken: number;
-  timeTaken: number;
-}
-
-const normalizedElement = (element: number, array: number[]) => {
-  const realNum = element / Math.max(...array)
-  const minOutput = 1
-  const maxOutput = 9
-
-  return Math.floor(realNum * (maxOutput - minOutput)) + minOutput
-
-
-
-
-
-
-
-}
-
-
+const INITIAL_ARRAY = [11, 99, 2, 3, 0, 6, 3, 88, 1, 94, 26, 15, 89, 61, 7, -5, 13, 108, 5, 77, 9]
 
 export default function Home() {
-  const algos = [mergeSortNodeVis, mergeSortNodeVis]
+  const algos = [mergeSort, quickSort]
 
-  const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
-  const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
-
-  const [globalStep, setGlobalStep] = useState<number>(0)
-
-  const captureInterstepSnapsot = (interstepArray: number[], algoIndex: number) => {
-    // Create container for new results, and add latest result in
-    const newResults = [...algoResults]
-    newResults[algoIndex].unshift(interstepArray)
-
-    // Update global result set each time a single algo has new results
-    const newAlgoStats = algoStats
-    newAlgoStats[algoIndex].stepsTaken += 1
-    setAlgoStats(newAlgoStats)
-    setAlgoResults(newResults)
-  }
+  const [algoResults, setAlgoResults] = useState<RecursiveSortResults[]>([])
 
   useEffect(() => {
-    for (let i = 0; i < algos.length; i++) {
-      const algoFunction = algos[i]
-      const algoResults = algoFunction(INITIAL_ARRAY)
-    }
+    const newAlgoResults = algos.map(algoFunction => {
+      return algoFunction(INITIAL_ARRAY)
+    })
+    setAlgoResults(newAlgoResults)
   }, [])
-
-  const testValues = mergeSortNodeVis(INITIAL_ARRAY)
-
-  const testValues2 = quickSortNodeVis(INITIAL_ARRAY)
-
-
-  console.log(testValues.sortedArray)
 
   return (
     <div>
       <h2>On this page: Red = Unsorted, Green = Sorted</h2>
 
-      <ShowGraph node={testValues.graph} />
-
-      <br />
-      <br />
-
-
-      <ShowGraph node={testValues2.graph} />
+      {algoResults.map((results, algoNum) => {
+        console.log("algoResults called with", results)
+        return (
+          <>
+            <div className={`flex flex-row justify-center text-black-700 m-5 mt-20`}>
+              Algo {algoNum + 1}: {algos[algoNum].name}
+            </div>
+            <ShowGraph node={results.graph} />
+          </>
+        )
+      })}
 
 
 

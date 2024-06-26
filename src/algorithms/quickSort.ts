@@ -13,11 +13,9 @@
 
 // This is a recursive sort, so has to be able to take in smaller ranges
 
-import { Node } from "./mergeSortTreeVis";
+import { Node, RecursiveSortResults } from "./mergeSort";
 
-export const quickSortNodeVis = (
-  inputArray: number[]
-): { sortedArray: number[]; graph: Node } => {
+export const quickSort = (inputArray: number[]): RecursiveSortResults => {
   // we create a Node object to capture all the activity of this iteration
   let thisNode: Node = { unsortedArray: inputArray, sortedArray: inputArray };
 
@@ -50,28 +48,16 @@ export const quickSortNodeVis = (
     } else right.push(testValue);
   }
 
-  // const recursiveCallLeft = (left.length > 0) ? quickSortNodeVis(left) : null
+  const recursiveCallLeft = left.length > 0 ? quickSort(left) : null;
+  const recursiveCallRight = right.length > 0 ? quickSort(right) : null;
 
-  // const recursiveCallRight = (right.length > 0) ? quickSortNodeVis(right) : null
+  const sortedLeft = recursiveCallLeft ? recursiveCallLeft.sortedArray : [];
+  const sortedRight = recursiveCallRight ? recursiveCallRight.sortedArray : [];
+  const outputArray = [...sortedLeft, pivotValue, ...sortedRight];
 
-  let sortedSmallerArray: number[] = [];
-  let sortedLargerArray: number[] = [];
+  thisNode.leftChild = recursiveCallLeft?.graph;
+  thisNode.rightChild = recursiveCallRight?.graph;
+  thisNode.sortedArray = outputArray;
 
-  if (left.length > 0) {
-    const smallResults = quickSortNodeVis(left);
-    sortedSmallerArray = smallResults.sortedArray;
-    thisNode.leftChild = smallResults.graph;
-  }
-
-  if (right.length > 0) {
-    const largeResults = quickSortNodeVis(right);
-    sortedLargerArray = largeResults.sortedArray;
-    thisNode.rightChild = largeResults.graph;
-  }
-
-  const newArray = [...sortedSmallerArray, pivotValue, ...sortedLargerArray];
-
-  thisNode.sortedArray = newArray;
-
-  return { sortedArray: newArray, graph: thisNode };
+  return { sortedArray: outputArray, graph: thisNode };
 };

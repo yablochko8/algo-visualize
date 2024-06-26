@@ -5,8 +5,6 @@ import { bubbleSort } from "@/algorithms/bubbleSort";
 import { selectionSort } from "@/algorithms/selectionSort";
 import { mergeSortVariant } from "@/algorithms/mergeSortVariant";
 import { insertionSort } from "@/algorithms/insertionSort";
-import { quickSort } from "@/algorithms/quickSort";
-import { mergeSort } from "@/algorithms/mergeSort";
 import { ShowArray } from "@/components/ShowArray";
 
 

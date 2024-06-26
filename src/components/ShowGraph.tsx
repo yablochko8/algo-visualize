@@ -10,7 +10,7 @@ export const ShowGraph = ({ node }: { node: Node }) => {
     const classWithinRowForArray = "flex justify-center p-1 rounded border" // This does not need to contain flex-row
     const columnClass = "flex flex-col bg-slate-100 px-0.5"
 
-    if (!node.leftChild || !node.rightChild)
+    if (!node.leftChild && !node.rightChild)
         return (
             <div className={columnClass}>
                 <div className={rowClass}>

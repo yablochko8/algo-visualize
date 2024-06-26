@@ -1,6 +1,6 @@
 "use client"
 
-import { Node } from "../../algorithms/mergeSortTreeVis"
+import { Node } from "../../algorithms/mergeSort"
 
 const NodeComponent = ({ node }: { node: Node }) => {
   return (

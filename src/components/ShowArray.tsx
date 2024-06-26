@@ -35,11 +35,16 @@ type ShowArrayProps = {
 
 
 const normalizedElement = (element: number, arrayMin: number = 0, arrayMax: number = 100) => {
-    const realNum = (element - arrayMin) / arrayMax
+    const proportion = (element - arrayMin) / arrayMax
     const minOutput = 1
     const maxOutput = 8
+    const roughWeighted = Math.floor(proportion * (maxOutput - minOutput))
 
-    return Math.floor(realNum * (maxOutput - minOutput)) + minOutput
+    if (roughWeighted < minOutput) return minOutput
+
+    else if (roughWeighted > maxOutput) return maxOutput
+
+    else return Math.floor(roughWeighted)
 }
 
 
