@@ -7,10 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 type LinkProps = { title: string, path: string }
 
 const linkList: LinkProps[] = [
-  { title: "All Algos", path: "/" },
-  { title: "Sort (Iterative)", path: "/sort-iterative" },
-  { title: "Sort (Recursive)", path: "/sort-recursive" },
-  { title: "Search", path: "/search" },
+  { title: "Sort Iterative", path: "/sort-iterative" },
+  { title: "Sort Recursive", path: "/sort-recursive" },
+  { title: "Search Array", path: "/search-array" },
+  { title: "Search Graph", path: "/search-graph" },
   { title: "Pathfind", path: "/pathfind" },
 ]
 
