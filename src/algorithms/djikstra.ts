@@ -96,13 +96,40 @@ type Step = "N" | "S" | "W" | "E";
 export type Path = {
   startRow: number;
   startCol: number;
-  endRow: number;
-  endCol: number;
+  row: number;
+  col: number;
   steps: Step[];
   cost: number;
 };
 
-// const incrementPath:
+const checkNextStep = (
+  grid: BoardGrid,
+  path: Path,
+  activePaths: Path[],
+  abandonedPaths: Path[]
+): Path[] => {
+  // Check North
+  const north = grid[path.row - 1][path.col];
+  const south = grid[path.row + 1][path.col];
+  const west = grid[path.row][path.col - 1];
+  const east = grid[path.row][path.col + 1];
+  const compass = [north, south, west, east]
+
+  const passableRoutes = []
+
+  for (const point of compass) {
+    let passable = true
+    if (point === undefined){
+        passable = false
+    }
+    else if (point === mountain){
+        passable = false
+    }
+    else if (point)
+
+  }
+
+};
 
 const findPath = (
   grid: BoardGrid,
@@ -115,8 +142,8 @@ const findPath = (
   const nullPath = {
     startRow: startRow,
     startCol: startCol,
-    endRow: startRow,
-    endCol: startCol,
+    row: startRow,
+    col: startCol,
     steps: [],
     cost: 0,
   };
@@ -133,6 +160,8 @@ const findPath = (
   const abandonedPaths: Path[] = [];
 
   while (!solutionFound) {
+    const topPath = activePaths.shift();
+
     // Take the top path from activePaths
     // Seek out options from the end of that path
     // Check if possible:
