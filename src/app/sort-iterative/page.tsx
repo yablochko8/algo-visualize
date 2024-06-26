@@ -120,41 +120,13 @@ export default function Home() {
                   // NOT have an antecedent. Hence testCycle needs to be at smaller
                   // than length - 1 
                   const testHasAntecedent = (testCycleNum < algoResults[algoNum].length - 1)
+                  const prevArray = testHasAntecedent ? algoResultSet[testCycleNum + 1] : undefined
 
                   return (
                     <>
-                      <br />
                       <div className="flex flex-row">
-
-                        <ShowArray array={singleArray} color={algoColor} />
-
+                        <ShowArray array={singleArray} color={algoColor} prevArray={prevArray} />
                       </div>
-                      <div className="flex flex-row">
-
-                        {singleArray.map((element, elementIndex) => {
-                          const normElement = normalizedElement(element, singleArray)
-
-                          const elementHasChanged = (testHasAntecedent && algoResultSet[testCycleNum][elementIndex] != algoResultSet[testCycleNum + 1][elementIndex])
-
-                          return (
-                            <>
-                              <div className="flex flex-col">
-
-                                <div className={`flex flex-row justify-center m-1 p-1 bg-${algoColor}-${normElement}00 rounded`}>
-                                  {element}
-                                </div>
-                                <div className={`flex flex-row h-1 ${elementHasChanged ? "bg-gray-400" : ""}`}>
-                                </div>
-                                <div className="flex flex-row h-5">
-
-                                </div>
-                              </div>
-
-                            </>
-                          )
-                        })}
-                      </div>
-                      <br />
                     </>
                   )
                 }
