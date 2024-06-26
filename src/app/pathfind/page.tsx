@@ -22,10 +22,10 @@ const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const addNewCell = (hazardLevel: number, ...knownNeighours: number[]) => {
+const addNewCell = (hazardLevel: number, ...knownNeighours: CellValue[]): CellValue => {
 
   // Start with 8 x Field, 2 x Forest
-  const selectionArray = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
+  const selectionArray: CellValue[] = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, ...knownNeighours]
 
   // Add more Forest for every level above 0
   for (let i = 0; i < hazardLevel; i++) {
@@ -51,24 +51,71 @@ const addNewCell = (hazardLevel: number, ...knownNeighours: number[]) => {
 /**
  * Creates a new grid with specified dimensions and obstacles.
  *
- * @param {number} width - The width of the grid.
- * @param {number} height - The height of the grid.
+ * @param {number} rows - Height of the grid in rows.
+ * @param {number} cols - Width of the grid in columns.
  * @param {number} hazardLevel - Number between 0 and 10 to determine how hard the terrain should be to pass.
  * @returns {BoardGrid} - BoardGrid
  */
-const createNewGrid = (width: number, height: number, hazardLevel: number): BoardGrid => {
+const createNewGrid = (rows: number, cols: number, hazardLevel: number): BoardGrid => {
 
-  for (let i = 0; i < width; i++);
+  const newGrid: BoardGrid = []
 
-  return [[]]
+  for (let i = 0; i < rows; i++) {
+    newGrid[i] = []
+    for (let j = 0; j < cols; j++) {
+      const newCell = addNewCell(hazardLevel)
+      newGrid[i][j] = newCell
+    }
+  }
+
+  return newGrid
+}
+
+const getCellColor = (cellValue: CellValue) => {
+  if (cellValue === 1) return "bg-green-400 hover:bg-green-600"
+  if (cellValue === 2) return "bg-green-700 hover:bg-green-900"
+  if (cellValue === 3) return "bg-amber-700 hover:bg-amber-900"
+  else return "bg-slate-700 hover:bg-slate-900"
+}
+
+const rowClass = "flex flex-row"
+const colClass = "flex flex-col"
+const cellClass = "flex flex-col rounded p-6"
+
+const DisplayGrid = ({ grid }: { grid: BoardGrid }) => {
+  return (
+    <div className={colClass}>
+      {grid.map((rowArray, rowNum) => {
+        return (
+          <div className={rowClass}>
+            {rowArray.map((cellValue, index) => {
+              const cellColor = getCellColor(cellValue)
+              return (
+                <div className={cellClass + " " + cellColor}>
+                </div>
+              )
+            })}
+            <br />
+          </div>
+        )
+
+      }
+
+      )}
+    </div>
+  )
 }
 
 export default function PathFindPage() {
+
+  const testGrid = createNewGrid(15, 18, 10)
 
 
   return (
     <div>
       <h2>This is the Pathfind page</h2>
+
+      <DisplayGrid grid={testGrid} />
 
     </div>
   );
