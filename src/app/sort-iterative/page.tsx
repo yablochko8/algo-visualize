@@ -7,6 +7,9 @@ import { mergeSortVariant } from "@/algorithms/mergeSortVariant";
 import { insertionSort } from "@/algorithms/insertionSort";
 import { quickSort } from "@/algorithms/quickSort";
 import { mergeSort } from "@/algorithms/mergeSort";
+import { ShowArray } from "@/components/ShowArray";
+
+
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -121,6 +124,11 @@ export default function Home() {
                   return (
                     <>
                       <br />
+                      <div className="flex flex-row">
+
+                        <ShowArray array={singleArray} color={algoColor} />
+
+                      </div>
                       <div className="flex flex-row">
 
                         {singleArray.map((element, elementIndex) => {
