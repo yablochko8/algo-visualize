@@ -1,6 +1,6 @@
 "use client"
 
-import { BoardGrid, CellValue, createNewGrid } from "@/algorithms/djikstra"
+import { BoardGrid, CellValue, createNewGrid, findPath } from "@/algorithms/djikstra"
 
 
 
@@ -43,12 +43,18 @@ export default function PathFindPage() {
 
   const testGrid = createNewGrid(10, 12, 7)
 
+  const answer = findPath(testGrid, 5, 5, 0, 0)
+
 
   return (
     <div>
       <h2>This is the Pathfind page</h2>
 
       <DisplayGrid grid={testGrid} />
+
+      It took this many steps:
+
+      {answer.cost}
 
     </div>
   );

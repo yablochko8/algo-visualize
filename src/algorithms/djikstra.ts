@@ -94,7 +94,7 @@ export const createNewGrid = (
   return newGrid;
 };
 
-const graphFromBoardGrid = (grid: BoardGrid) => {
+export const graphFromBoardGrid = (grid: BoardGrid) => {
   const rows = grid.length;
   const cols = grid[0].length;
   const graph: CellNode[][] = [];
@@ -155,6 +155,7 @@ const checkNextStep = (
   graph: CellNode[][]
 ): Path[] => {
   const adjacents = graph[path.row][path.col].adjs;
+  const newPaths = [];
 
   for (const adj of adjacents) {
     const abandonedPath = abandonedPaths.find(
@@ -171,20 +172,14 @@ const checkNextStep = (
       newPath.row = row;
       newPath.col = col;
       newPath.steps.push(graph[row][col]);
+      newPaths.push(newPath);
     }
   }
-  const north = grid[path.row - 1][path.col];
-  const south = grid[path.row + 1][path.col];
-  const west = grid[path.row][path.col - 1];
-  const east = grid[path.row][path.col + 1];
-  const compass = [north, south, west, east];
 
-  const passableRoutes = [];
-
-  return [path];
+  return newPaths;
 };
 
-const findPath = (
+export const findPath = (
   grid: BoardGrid,
   targetRow: number,
   targetCol: number,
@@ -201,6 +196,8 @@ const findPath = (
     cost: 0,
   };
 
+  const graph = graphFromBoardGrid(grid);
+
   // Send null response if starting or finishing cells are impassable
   if (grid[startRow][startCol] === -1 || grid[targetRow][targetCol] === -1) {
     return nullPath;
@@ -214,15 +211,23 @@ const findPath = (
 
   while (!solutionFound) {
     const topPath = activePaths.shift();
-
-    // Take the top path from activePaths
-    // Seek out options from the end of that path
-    // Check if possible:
-    //  - not impassable
-    //  - not seen before for cheaper (ie not already in active or abandoned paths for cheaper)
-    // Add new options to activePaths
-    // Add old path to abandonedPaths
-    // Sort allActivePaths so shortest routes are first
+    if (topPath != undefined) {
+      if (topPath.row === targetRow && topPath.col === targetCol) {
+        return topPath;
+      }
+      const newPaths = checkNextStep(
+        grid,
+        topPath,
+        activePaths,
+        abandonedPaths,
+        graph
+      );
+      for (const path of newPaths) {
+        activePaths.push(path);
+      }
+      abandonedPaths.push(topPath);
+    }
+    activePaths.sort((a, b) => a.cost - b.cost);
   }
   return nullPath;
 };
