@@ -41,7 +41,7 @@ const DisplayGrid = ({ grid }: { grid: BoardGrid }) => {
 
 export default function PathFindPage() {
 
-  const testGrid = createNewGrid(15, 18, 7)
+  const testGrid = createNewGrid(10, 12, 7)
 
 
   return (

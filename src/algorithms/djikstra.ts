@@ -19,6 +19,12 @@ export type CellValue =
  */
 export type BoardGrid = CellValue[][];
 
+type CellNode = {
+  row: number;
+  col: number;
+  adjs: CellNode[];
+};
+
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -88,17 +94,56 @@ export const createNewGrid = (
   return newGrid;
 };
 
+const graphFromBoardGrid = (grid: BoardGrid) => {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const graph: CellNode[][] = [];
+
+  // Initialize nodes mimicking the original grid
+  for (let i = 0; i < rows; i++) {
+    const row: CellNode[] = [];
+    for (let j = 0; j < cols; j++) {
+      row.push({ row: i, col: j, adjs: [] });
+    }
+    graph.push(row);
+  }
+
+  // Add info on adjacent cells
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const node = graph[i][j];
+      if (grid[i][j] < 0) {
+        // do nothing
+      } else {
+        if (i > 0 && grid[i - 1][j] > 0) {
+          node.adjs.push(graph[i - 1][j]); // North
+        }
+        if (i < rows - 1 && grid[i + 1][j] > 0) {
+          node.adjs.push(graph[i + 1][j]); // South
+        }
+        if (j > 0 && grid[i][j - 1] > 0) {
+          node.adjs.push(graph[i][j - 1]); // West
+        }
+        if (j < cols - 1 && grid[i][j + 1] > 0) {
+          node.adjs.push(graph[i][j + 1]); // East
+        }
+      }
+    }
+  }
+  return graph;
+};
+
 type Step = "N" | "S" | "W" | "E";
 
 /**
  * Values for Step array are = "N" | "S" | "W" | "E"
  */
-export type Path = {
+type Path = {
   startRow: number;
   startCol: number;
   row: number;
   col: number;
-  steps: Step[];
+  steps: CellNode[];
   cost: number;
 };
 
@@ -106,29 +151,37 @@ const checkNextStep = (
   grid: BoardGrid,
   path: Path,
   activePaths: Path[],
-  abandonedPaths: Path[]
+  abandonedPaths: Path[],
+  graph: CellNode[][]
 ): Path[] => {
-  // Check North
+  const adjacents = graph[path.row][path.col].adjs;
+
+  for (const adj of adjacents) {
+    const abandonedPath = abandonedPaths.find(
+      (path) => path.row === adj.row && path.col === adj.col
+    );
+    const activePath = activePaths.find(
+      (path) => path.row === adj.row && path.col === adj.col
+    );
+    if (!abandonedPath && !activePath) {
+      const newPath = { ...path };
+      const row = adj.row;
+      const col = adj.col;
+      newPath.cost += grid[row][col];
+      newPath.row = row;
+      newPath.col = col;
+      newPath.steps.push(graph[row][col]);
+    }
+  }
   const north = grid[path.row - 1][path.col];
   const south = grid[path.row + 1][path.col];
   const west = grid[path.row][path.col - 1];
   const east = grid[path.row][path.col + 1];
-  const compass = [north, south, west, east]
+  const compass = [north, south, west, east];
 
-  const passableRoutes = []
+  const passableRoutes = [];
 
-  for (const point of compass) {
-    let passable = true
-    if (point === undefined){
-        passable = false
-    }
-    else if (point === mountain){
-        passable = false
-    }
-    else if (point)
-
-  }
-
+  return [path];
 };
 
 const findPath = (
@@ -171,4 +224,5 @@ const findPath = (
     // Add old path to abandonedPaths
     // Sort allActivePaths so shortest routes are first
   }
+  return nullPath;
 };
