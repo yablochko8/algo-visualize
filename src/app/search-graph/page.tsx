@@ -1,5 +1,19 @@
 "use client"
 
+import { Node } from "../../algorithms/mergeSort"
+const NodeComponent = ({ node }: { node: Node }) => {
+  return (
+    <div>
+      <div> {node.unsortedArray} </div>
+      <div> {node.sortedArray} </div>
+      {node.leftChild ? <NodeComponent node={node.leftChild} /> : <div />}
+      {node.rightChild ? <NodeComponent node={node.rightChild} /> : <div />}
+
+
+    </div>
+  )
+}
+
 export default function Home() {
 
   const chaoticArray = [35, 2, -74, 85, 69, -6, -37, 33, 85, 18, -7, 79, 94, 75, -25, 20, -61, 2, 92, -16]
@@ -53,6 +67,8 @@ export default function Home() {
   //     9
   //   )
   // );
+
+
 
 
 
