@@ -6,6 +6,9 @@ import { selectionSort } from "@/algorithms/selectionSort";
 import { mergeSortVariant } from "@/algorithms/mergeSortVariant";
 import { insertionSort } from "@/algorithms/insertionSort";
 import { quickSort } from "@/algorithms/quickSort";
+import { mergeSort } from "@/algorithms/mergeSort";
+import { ShowGraph } from "../../components/ShowGraph"
+import { mergeSortNodeVis } from "@/algorithms/mergeSortTreeVis"
 
 // all classes of BG color I expect to call from Tailwind:
 // bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 
@@ -63,10 +66,24 @@ const normalizedElement = (element: number, array: number[]) => {
   const maxOutput = 9
 
   return Math.floor(realNum * (maxOutput - minOutput)) + minOutput
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
+
+
 export default function Home() {
-  const algos = [quickSort, insertionSort, bubbleSort, selectionSort, mergeSortVariant]
+  const algos = [quickSort, mergeSort]
 
   const [algoResults, setAlgoResults] = useState<number[][][]>(initiateAlgoResults(algos.length))
   const [algoStats, setAlgoStats] = useState<algoStats[]>(initiateAlgoStats(algos.length))
@@ -92,8 +109,12 @@ export default function Home() {
     }
   }, [])
 
+  const testValues = mergeSortNodeVis(INITIAL_ARRAY)
+  console.log(testValues.sortedArray)
+
   return (
     <div>
+      <ShowGraph node={testValues.graph} />
       <h2>Let's compare algorithms!</h2>
       <br />
       <div className="flex flex-row">

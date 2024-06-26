@@ -46,9 +46,13 @@ export const mergeSort = (
   const right = array.slice(middle, array.length);
 
   // each subarray is sorted individually
-  const sortedLeft = mergeSort(left);
-  const sortedRight = mergeSort(right);
+  const sortedLeft = mergeSort(left, callback, callbackRef);
+  const sortedRight = mergeSort(right, callback, callbackRef);
 
+  if ((callback && callbackRef) || (callback && callbackRef === 0)) {
+    const localArray = merge(sortedLeft, sortedRight);
+    callback(localArray, callbackRef);
+  }
   // sorted subarrays are merged back together
   return merge(sortedLeft, sortedRight);
 };
