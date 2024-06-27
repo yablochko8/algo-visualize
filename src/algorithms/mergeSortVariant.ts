@@ -1,4 +1,4 @@
-import { mergeTwoSortedArrays } from "./sortIngredients";
+import { mergeTwoSortedArrays } from "./arrayTools";
 
 export const mergeSortVariant = (
   inputArray: number[],

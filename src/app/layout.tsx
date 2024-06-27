@@ -8,7 +8,8 @@ type LinkProps = { title: string, path: string }
 
 const linkList: LinkProps[] = [
   { title: "All Algos", path: "/" },
-  { title: "Sort", path: "/sort" },
+  { title: "Sort (Iterative)", path: "/sort-iterative" },
+  { title: "Sort (Recursive)", path: "/sort-recursive" },
   { title: "Search", path: "/search" },
   { title: "Pathfind", path: "/pathfind" },
 ]

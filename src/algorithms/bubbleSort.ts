@@ -7,7 +7,7 @@
 // comparison sort, is named for the way the larger elements "bubble" up
 // to the top of the list.
 
-import { arraysAreEqual } from "./checkArrays";
+import { arraysAreEqual } from "./arrayTools";
 
 const shouldSwapFn = (elem1: number, elem2: number): boolean => {
   return elem2 < elem1;
