@@ -1,15 +1,12 @@
-// Textbook solution that is cleaner, recursive
+export type Node = {
+  unsortedArray: number[];
+  sortedArray: number[];
+  leftChild?: Node;
+  middleChild?: Node;
+  rightChild?: Node;
+};
 
-// Step 1
-// Divide: the list or array recursively into two halves until it can no more be divided.
-// Insight - a single item array is sorted [1]
-
-// Step 2
-// Sort (Recursion): Each subarray is sorted individually using the merge sort algorithm
-
-// Step 3
-// Merge: The sorted subarrays are merged back together in sorted order. Called last but
-// write this part first!
+export type RecursiveSortResults = { sortedArray: number[]; graph: Node };
 
 const merge = (left: number[], right: number[]): number[] => {
   const newLeft = [...left];
@@ -30,31 +27,33 @@ const merge = (left: number[], right: number[]): number[] => {
   return [...sorted, ...newLeft, ...newRight];
 };
 
-export const mergeSort = (
-  array: number[],
-  callback?: (interstepArray: number[], callbackRef: number) => void,
-  callbackRef?: number
-): number[] => {
+export const mergeSort = (inputArray: number[]): RecursiveSortResults => {
+  // we create a Node object to capture all the activity of this iteration
+  let thisNode: Node = { unsortedArray: inputArray, sortedArray: inputArray };
+
   // an array of only one element is already "sorted"
-  if (array.length === 1) {
-    return array;
+  if (inputArray.length === 1) {
+    return { sortedArray: inputArray, graph: thisNode };
   }
 
   // split it into two items and feed those to merge
-  const middle = Math.floor(array.length / 2);
-  const left = array.slice(0, middle);
-  const right = array.slice(middle, array.length);
+  const middle = Math.floor(inputArray.length / 2);
+  const left = inputArray.slice(0, middle);
+  const right = inputArray.slice(middle, inputArray.length);
 
   // each subarray is sorted individually
-  const sortedLeft = mergeSort(left, callback, callbackRef);
-  const sortedRight = mergeSort(right, callback, callbackRef);
+  const recursiveCallLeft = mergeSort(left);
+  const recursiveCallRight = mergeSort(right);
 
-  if ((callback && callbackRef) || (callback && callbackRef === 0)) {
-    const localArray = merge(sortedLeft, sortedRight);
-    callback(localArray, callbackRef);
-  }
-  // sorted subarrays are merged back together
-  return merge(sortedLeft, sortedRight);
+  const sortedLeft = recursiveCallLeft.sortedArray;
+  const sortedRight = recursiveCallRight.sortedArray;
+  const outputArray = merge(sortedLeft, sortedRight);
+
+  thisNode.leftChild = recursiveCallLeft.graph;
+  thisNode.rightChild = recursiveCallRight.graph;
+  thisNode.sortedArray = outputArray;
+
+  return { sortedArray: outputArray, graph: thisNode };
 };
 
 const chaoticArray = [
